@@ -388,7 +388,12 @@ module ActionController
       end
 
       def self.live_thread_pool_executor
-        @live_thread_pool_executor ||= Concurrent::CachedThreadPool.new(name: "action_controller.live")
+        @live_thread_pool_executor ||= Concurrent::ThreadPoolExecutor.new(
+          name: "action_controller.live",
+          min_threads: 0,
+          max_threads: 3,
+          max_queue: 0,
+        )
       end
 
       def log_error(exception)
